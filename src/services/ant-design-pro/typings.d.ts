@@ -98,4 +98,42 @@ declare namespace API {
     description?: string;
     type?: NoticeIconItemType;
   };
+
+
+  /**
+   * 返回的实体
+   */
+  type Result<T> = {
+    message?: string;
+    status?: number;
+    data?: T;
+  }
+
+
+  /**
+   * 所有項目
+   */
+  type Project ={
+    id?:string;
+    name?:string;
+    groupId?:string;
+    artifactId?:string;
+    baseVersion?:string;
+    version?:string;
+    createTime?:string;
+  }
+
+
+  /**
+   * 所有項目
+   */
+  type Artifact ={
+    id?:string;
+    name?:string;
+    groupId?:string;
+    artifactId?:string;
+    baseVersion?:string;
+    version?:string;
+    createTime?:string;
+  }
 }
