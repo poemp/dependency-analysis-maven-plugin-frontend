@@ -1,6 +1,7 @@
 import {artifactUsingProjects} from '@/services/ant-design-pro/api';
 import type {ActionType, ProColumns} from '@ant-design/pro-components';
 import {PageContainer, ProTable,} from '@ant-design/pro-components';
+import { useLocation } from 'react-router-dom'
 import React, {useEffect, useRef, useState} from 'react';
 
 
@@ -9,20 +10,27 @@ const DependencyProjectList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [dataSource,setDataSource] = useState<API.Project[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const location = useLocation()
 
   /**
    * 获取数据
    */
   function fetchData() {
     setLoading(true);
-    artifactUsingProjects("1").then((res) => {
-      if (res?.status === 0) {
-        const {data} = res;
-        // @ts-ignore
-        setDataSource(data?data:[]);
-      }
-      setLoading(false);
-    });
+    //获取请求路径里面的参数
+    const utm = new URLSearchParams(location.search)
+    if (utm.get("artifactId")) {
+      const artifactId = utm.get("artifactId");
+      artifactUsingProjects(artifactId as string).then((res) => {
+        if (res?.status === 0) {
+          const {data} = res;
+          // @ts-ignore
+          setDataSource(data?data:[]);
+        }
+        setLoading(false);
+      });
+    }
+
   }
   /**
    * start page will run
@@ -70,9 +78,12 @@ const DependencyProjectList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.Project, API.PageParams>
-        headerTitle={"all project"}
+        headerTitle={"all dependency project"}
         actionRef={actionRef}
         rowKey="key"
+        size="small"
+        loading={loading}
+        bordered={true}
         search={{
           labelWidth: 120,
         }}

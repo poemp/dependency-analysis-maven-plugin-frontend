@@ -59,7 +59,7 @@ export default [
   },
   {
     path: '/dependency-project',
-    component: './DependencyList',
+    component: './DependencyProjectList',
   },
   // {
   //   name: 'list.table-list',
