@@ -1,14 +1,35 @@
-import {getAllProjectList} from '@/services/ant-design-pro/api';
+import {artifactUsingProjects} from '@/services/ant-design-pro/api';
 import type {ActionType, ProColumns} from '@ant-design/pro-components';
 import {PageContainer, ProTable,} from '@ant-design/pro-components';
-import {Button} from 'antd';
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 
-const ProjectList: React.FC = () => {
+const DependencyProjectList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
+  const [dataSource,setDataSource] = useState<API.Project[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
+  /**
+   * 获取数据
+   */
+  function fetchData() {
+    setLoading(true);
+    artifactUsingProjects("1").then((res) => {
+      if (res?.status === 0) {
+        const {data} = res;
+        // @ts-ignore
+        setDataSource(data?data:[]);
+      }
+      setLoading(false);
+    });
+  }
+  /**
+   * start page will run
+   */
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   /**
    * 数据列
@@ -19,17 +40,6 @@ const ProjectList: React.FC = () => {
       dataIndex: 'name',
       tip: 'project name',
       width:350,
-      render: (dom, entity) => {
-        return (
-          <a
-            onClick={() => {
-              console.log(entity)
-            }}
-          >
-            {dom}
-          </a>
-        );
-      },
     },
     {
       title: "group",
@@ -55,33 +65,6 @@ const ProjectList: React.FC = () => {
       hideInForm: true,
       search:false
     },
-    {
-      title: "operating",
-      dataIndex: 'option',
-      valueType: 'option',
-      render: (_, record) => [
-
-        // eslint-disable-next-line react/jsx-key
-        <Button
-          type="link"
-          title={"maven dependency tree"}
-          onClick={
-          ()=>{
-            console.log(record)
-          }
-        } >tree</Button>,
-
-        // eslint-disable-next-line react/jsx-key
-        <Button
-          title={"maven dependency tree"}
-          type="link"
-          onClick={
-            ()=>{
-              console.log(record)
-            }
-          } >list</Button>,
-      ],
-    },
   ];
 
   return (
@@ -93,7 +76,7 @@ const ProjectList: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
-        request={getAllProjectList}
+        dataSource={dataSource}
         columns={columns}
         defaultSize={"small"}
       />
@@ -101,4 +84,4 @@ const ProjectList: React.FC = () => {
   );
 };
 
-export default ProjectList;
+export default DependencyProjectList;

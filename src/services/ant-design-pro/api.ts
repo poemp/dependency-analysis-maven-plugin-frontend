@@ -95,12 +95,24 @@ export async function rule(
  * 獲取所有項目列表
  * @constructor
  */
+export async  function artifactUsingProjects(id:string, options?: { [key: string]: any }){
+  return request<API.Result<API.Project[]>>('/api/artifactUsingProjects/'+ id, {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
+/**
+ * 獲取所有項目列表
+ * @constructor
+ */
 export async  function getAllProjectList(options?: { [key: string]: any }){
   return request<API.Result<API.Project[]>>('/api/projects', {
     method: 'GET',
     ...(options || {}),
   });
 }
+
 /**
  * 獲取所有依赖
  * @constructor

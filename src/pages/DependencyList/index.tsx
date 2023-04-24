@@ -1,9 +1,10 @@
 import {removeRule, getAllArtifactList} from '@/services/ant-design-pro/api';
 import type {ActionType, ProColumns} from '@ant-design/pro-components';
 import {FooterToolbar, PageContainer, ProTable,} from '@ant-design/pro-components';
-import {FormattedMessage, useIntl} from '@umijs/max';
-import {Button, message} from 'antd';
+import {FormattedMessage} from '@umijs/max';
+import {Button, message, Modal} from 'antd';
 import React, {useRef, useState} from 'react';
+import {history} from "@@/core/history";
 
 
 /**
@@ -35,15 +36,9 @@ const ProjectList: React.FC = () => {
   const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
 
   /**
-   * @en-US International configuration
-   * @zh-CN 国际化配置
-   * */
-  const intl = useIntl();
-
-  /**
    * 数据列
    */
-  const columns: ProColumns<API.RuleListItem>[] = [
+  const columns: ProColumns<API.Artifact>[] = [
     {
       title: "name",
       dataIndex: 'name',
@@ -53,7 +48,7 @@ const ProjectList: React.FC = () => {
         return (
           <a
             onClick={() => {
-              console.log(entity)
+              history.push("/dependency-project?artifactId="+entity.id);
             }}
           >
             {dom}
@@ -97,7 +92,7 @@ const ProjectList: React.FC = () => {
           title={"dependencies project"}
           onClick={
             () => {
-              console.log(record)
+              history.push("/dependency-project?artifactId="+record.id);
             }
           }>Projects</Button>
       ],

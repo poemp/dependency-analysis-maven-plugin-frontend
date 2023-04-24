@@ -57,6 +57,13 @@ export default [
     path: '/dependency',
     component: './DependencyList',
   },
+  {
+    name: 'dependency-project',
+    icon: 'table',
+    layout: true, //不显示在菜单中
+    path: '/dependency-project',
+    component: './DependencyList',
+  },
   // {
   //   name: 'list.table-list',
   //   icon: 'table',
