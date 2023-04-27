@@ -1,10 +1,9 @@
-import {getAllArtifactList, removeRule} from '@/services/ant-design-pro/api';
+import {getProjectArtifactListByProjectId, getProjectById, removeRule} from '@/services/ant-design-pro/api';
 import type {ActionType, ProColumns} from '@ant-design/pro-components';
 import {FooterToolbar, PageContainer, ProTable,} from '@ant-design/pro-components';
 import {FormattedMessage} from '@umijs/max';
 import {Button, message} from 'antd';
-import React, {useRef, useState} from 'react';
-import {history} from "@@/core/history";
+import React, {useEffect, useRef, useState} from 'react';
 
 
 /**
@@ -30,10 +29,56 @@ const handleRemove = async (selectedRows: API.RuleListItem[]) => {
   }
 };
 
-const ProjectList: React.FC = () => {
+const ProjectDependencyList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
+  const [datasource, setDatesource] = useState<API.Artifact[]>([])
+  const [project, setProject] = useState<API.Project>()
+
+
+  function getProjectDependencyList() {
+    //获取请求路径里面的参数
+    const utm = new URLSearchParams(location.search)
+    if (utm.get("projectId")) {
+      const projectId = utm.get("projectId");
+      getProjectArtifactListByProjectId(projectId as string).then((res) => {
+        if (res?.status === 0) {
+          const {data} = res;
+          // @ts-ignore
+          setDatesource(data ? data : []);
+        }
+      });
+    }
+
+  }
+
+  /**
+   * 获取数据
+   */
+  function fetchData() {
+    //获取请求路径里面的参数
+    const utm = new URLSearchParams(location.search)
+    if (utm.get("projectId")) {
+      const projectId = utm.get("projectId");
+      getProjectById(projectId as string).then((res) => {
+        if (res?.status === 0) {
+          const {data} = res;
+          // @ts-ignore
+          setProject(data ? data : {});
+        }
+      });
+    }
+  }
+
+  /**
+   * start page will run
+   */
+  useEffect(() => {
+    fetchData()
+    getProjectDependencyList()
+  }, []);
+
 
   /**
    * 数据列
@@ -44,17 +89,6 @@ const ProjectList: React.FC = () => {
       dataIndex: 'name',
       tip: 'project name',
       width: 350,
-      render: (dom, entity) => {
-        return (
-          <a
-            onClick={() => {
-              history.push("/dependency-project?artifactId="+entity.id);
-            }}
-          >
-            {dom}
-          </a>
-        );
-      },
     },
     {
       title: "group",
@@ -80,36 +114,19 @@ const ProjectList: React.FC = () => {
       hideInForm: true,
       search: false
     },
-    {
-      title: "operating",
-      dataIndex: 'option',
-      valueType: 'option',
-      render: (_, record) => [
-
-        // eslint-disable-next-line react/jsx-key
-        <Button
-          type="link"
-          title={"dependencies project"}
-          onClick={
-            () => {
-              history.push("/dependency-project?artifactId="+record.id);
-            }
-          }>Projects</Button>
-      ],
-    },
   ];
 
   return (
-    <PageContainer>
+    <PageContainer title={"project dependency list"}>
       <ProTable<API.RuleListItem, API.PageParams>
-        headerTitle={"all dependencies"}
+        headerTitle={"【" + project?.name + "】Project all dependencies"}
         actionRef={actionRef}
         rowKey="key"
         search={{
           labelWidth: 120,
         }}
         defaultSize={"small"}
-        request={getAllArtifactList}
+        dataSource={datasource}
         columns={columns}
       />
       {/*選擇情況*/}
@@ -156,4 +173,4 @@ const ProjectList: React.FC = () => {
   );
 };
 
-export default ProjectList;
+export default ProjectDependencyList;

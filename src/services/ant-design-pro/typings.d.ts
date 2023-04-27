@@ -136,4 +136,18 @@ declare namespace API {
     version?:string;
     createTime?:string;
   }
+
+
+  type ProjectArtifactTree ={
+    id?:string;
+    name?:string;
+    title?:string;
+    value?:string;
+    groupId?:string;
+    artifactId?:string;
+    baseVersion?:string;
+    version?:string;
+    createTime?:string;
+  }
+
 }

@@ -34,7 +34,7 @@ export async function login(body: API.LoginParams, options?: { [key: string]: an
 
 export async function currentUserLocal(options?: { [key: string]: any }) {
   return new Promise<{
-    data:API.CurrentUser
+    data: API.CurrentUser
   }>(function (resolve, reject) {
     resolve({
       data: {
@@ -95,18 +95,50 @@ export async function rule(
  * 獲取所有項目列表
  * @constructor
  */
-export async  function artifactUsingProjects(id:string, options?: { [key: string]: any }){
-  return request<API.Result<API.Project[]>>('/api/artifactUsingProjects/'+ id, {
+export async function artifactUsingProjects(id: string, options?: { [key: string]: any }) {
+  return request<API.Result<API.Project[]>>('/api/artifactUsingProjects/' + id, {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
+
+/**
+ * 获取项目的详情
+ * @param id
+ * @param options
+ */
+export async function getProjectById(id: string, options?: { [key: string]: any }) {
+  return request<API.Result<API.Project>>('/api/project/' + id, {
     method: 'GET',
     ...(options || {}),
   });
 }
 
 /**
+ * 获取项目的属性依赖
+ * @param id
+ * @param options
+ */
+export async function getProjectArtifactTreeByProjectId(id: string, options?: { [key: string]: any }) {
+  return request<API.Result<API.ProjectArtifactTree>>('/api/projectArtifactTree/' + id, {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
+
+export async function getProjectArtifactListByProjectId(id: string, options?: { [key: string]: any }) {
+  return request<API.Result<API.Artifact[]>>('/api/projectArtifactList/' + id, {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+/**
  * 獲取所有項目列表
  * @constructor
  */
-export async  function getAllProjectList(options?: { [key: string]: any }){
+export async function getAllProjectList(options?: { [key: string]: any }) {
   return request<API.Result<API.Project[]>>('/api/projects', {
     method: 'GET',
     ...(options || {}),
@@ -117,7 +149,7 @@ export async  function getAllProjectList(options?: { [key: string]: any }){
  * 獲取所有依赖
  * @constructor
  */
-export async  function getAllArtifactList(options?: { [key: string]: any }){
+export async function getAllArtifactList(options?: { [key: string]: any }) {
   return request<API.Result<API.Artifact[]>>('/api/artifacts', {
     method: 'GET',
     ...(options || {}),

@@ -3,6 +3,7 @@ import type {ActionType, ProColumns} from '@ant-design/pro-components';
 import {PageContainer, ProTable,} from '@ant-design/pro-components';
 import {Button} from 'antd';
 import React, {useRef} from 'react';
+import {history} from "@@/core/history";
 
 
 const ProjectList: React.FC = () => {
@@ -18,12 +19,13 @@ const ProjectList: React.FC = () => {
       title: "name",
       dataIndex: 'name',
       tip: 'project name',
-      width:350,
+      width: 350,
       render: (dom, entity) => {
         return (
           <a
             onClick={() => {
-              console.log(entity)
+              // @ts-ignore
+              history.push("/project-dependency-tree?projectId=" + entity.id);
             }}
           >
             {dom}
@@ -43,7 +45,7 @@ const ProjectList: React.FC = () => {
       title: "baseVersion",
       dataIndex: 'baseVersion',
       hideInForm: true,
-      search:false
+      search: false
     },
     {
       title: "version",
@@ -53,7 +55,7 @@ const ProjectList: React.FC = () => {
       title: "uploadTime",
       dataIndex: 'createTime',
       hideInForm: true,
-      search:false
+      search: false
     },
     {
       title: "operating",
@@ -66,20 +68,21 @@ const ProjectList: React.FC = () => {
           type="link"
           title={"maven dependency tree"}
           onClick={
-          ()=>{
-            console.log(record)
-          }
-        } >tree</Button>,
+            () => {
+              // @ts-ignore
+              history.push("/project-dependency-tree?projectId=" + record.id);
+            }
+          }>tree</Button>,
 
         // eslint-disable-next-line react/jsx-key
         <Button
           title={"maven dependency tree"}
           type="link"
           onClick={
-            ()=>{
-              console.log(record)
+            () => {
+              history.push("/project-dependency-list?projectId=" + record.id);
             }
-          } >list</Button>,
+          }>list</Button>,
       ],
     },
   ];

@@ -52,6 +52,14 @@ export default [
     component: './ProjectList',
   },
   {
+    path: '/project-dependency-tree',
+    component: './ProjectDependencyTree',
+  },
+  {
+    path: '/project-dependency-list',
+    component: './ProjectDependencyList',
+  },
+  {
     name: 'dependency',
     icon: 'table',
     path: '/dependency',

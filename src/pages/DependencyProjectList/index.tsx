@@ -76,7 +76,7 @@ const DependencyProjectList: React.FC = () => {
   ];
 
   return (
-    <PageContainer>
+    <PageContainer title={"use artifact project list"}>
       <ProTable<API.Project, API.PageParams>
         headerTitle={"all dependency project"}
         actionRef={actionRef}
